@@ -9,17 +9,69 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    
+    private var brain = CalculatorBrain()
+    private var decimalUsed = false
+    private var userIsInTheMiddleOfTyping = false
+    
+    @IBOutlet weak var display: UILabel!
+    
+    
+    @IBAction func Clear(_ sender: UIButton) {
+        userIsInTheMiddleOfTyping = false
+        brain.clear()
+        display.text = "0"
+        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    
+    @IBAction func touchDigit(_ sender: UIButton) {
+        let digit = sender.currentTitle!
+        
+        let TextCurrentlyInDisplay = display.text!
+        
+        if userIsInTheMiddleOfTyping{
+            
+            if digit == "." && decimalUsed == true{
+                return
+            }
+            else if digit == "." && decimalUsed == false{
+                decimalUsed = true
+            }
+            else{
+                display.text = TextCurrentlyInDisplay + digit
+            }
+            display.text = TextCurrentlyInDisplay + digit
+        }
+        else{
+            display!.text = digit
+        }
+        userIsInTheMiddleOfTyping = true
     }
-
-
+    
+    var displayValue : Double {
+        get{
+            return Double(display.text!)!
+        }
+        set{
+            display.text = String(newValue
+            )
+        }
+    }
+    
+    @IBAction func performOperation(_ sender: UIButton) {
+        
+        if userIsInTheMiddleOfTyping{
+            brain.setOperand(displayValue)
+            userIsInTheMiddleOfTyping = false
+        }
+        
+        if let mathaticalSymbol = sender.currentTitle{
+            brain.performOperation(mathaticalSymbol)
+        }
+        if brain.result != nil{
+            displayValue = brain.result!
+        }
+        
+    }
 }
-
