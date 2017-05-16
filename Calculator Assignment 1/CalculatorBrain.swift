@@ -14,7 +14,7 @@ func changeSign(operand: Double) -> Double{
 
 struct CalculatorBrain {
     
-    private var accumluator : Double?
+    private var accumulator : Double?
     
     
     var resultIsPending = false
@@ -33,7 +33,7 @@ struct CalculatorBrain {
     }
     
     mutating func clear() -> Void{
-        accumluator = 0.0
+        accumulator = 0.0
     }
     
     private var operations : Dictionary<String, Operation> = [
@@ -60,21 +60,21 @@ struct CalculatorBrain {
         if let operation = operations[symbol]{
             switch operation{
             case .constant(let Value):
-                accumluator = Value
+                accumulator = Value
             
             case .unaryOperation (let function):
-                if accumluator != nil{
-                    accumluator = function(accumluator!)
+                ifaccumulator != nil{
+                   accumulator = function(accumulator!)
                     resultIsPending = true
                 }
                 
             case .binaryOperation(let function):
                 performPendingBinaryOperation()
-                if accumluator != nil{
+                if accumulator != nil{
                 
-                pending = PendingBinaryOperation(perform: function, firstOperand: accumluator!)
+                pending = PendingBinaryOperation(perform: function, firstOperand: accumulator!)
                 
-                accumluator = nil
+                accumulator = nil
                 resultIsPending = true
                 }
                 
@@ -89,19 +89,19 @@ struct CalculatorBrain {
     
     private mutating func performPendingBinaryOperation(){
         if pending !=  nil{
-           accumluator = pending!.perform(pending!.firstOperand, accumluator!)
+           accumulator = pending!.perform(pending!.firstOperand, accumulator!)
             pending = nil
 
         }
             }
     
     mutating func setOperand(_ operand : Double){
-        accumluator = operand
+        accumulator = operand
     }
     
     var result : Double?{
         get{
-            return accumluator
+            return accumulator
         }
     }
     
